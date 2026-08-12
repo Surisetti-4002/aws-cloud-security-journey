@@ -37,8 +37,10 @@ Authentication
 Authorization
       ↓
 "What are you allowed to do?"
-
-
+```
+---
+## Lab Architecture
+```text
 AWS Account
      │
      ↓
@@ -52,9 +54,10 @@ CloudSec-Lab-Readers
      ↓
 Managed Policy
 AmazonS3ReadOnlyAccess
+```
 The IAM user receives permissions through the IAM group rather than having the policy attached directly to the user.
-
-Implementation
+---
+#Implementation
 1. Secured the AWS Root Account
 Before creating IAM resources, the AWS root account was secured with:
 
@@ -79,7 +82,7 @@ No long-lived AWS access keys created
 Group: CloudSec-Lab-Readers (used to centrally manage permissions instead of attaching policies individually).
 
 Policy: Attached the AWS managed policy AmazonS3ReadOnlyAccess to the group to provide read-oriented S3 permissions while avoiding unnecessary administrative access.
-
+---
 # Screenshots
 
 ## 1. AWS Root Account — MFA Enabled
@@ -127,34 +130,42 @@ Attempting to access S3 Table Buckets resulted in:
 `s3tables:ListTableBuckets` → `AccessDenied`
 
 ![S3 Access Denied](./screenshots/s3-access-denied.png)
-
-Testing & Results
-Test 1 — IAM Authorization
+---
+#Testing & Results
+##Test 1 — IAM Authorization
 Action: Attempted to access the IAM Users list via the console.
 
 Result: AccessDenied (iam:ListUsers)
 
 Observation: The user was successfully authenticated into AWS but was not authorized to perform the requested IAM operation.
 
-Test 2 — S3 Authorization
+##Test 2 — S3 Authorization
 Action: Explored S3 and attempted to access S3 Table Buckets.
 
 Result: AccessDenied (s3tables:ListTableBuckets)
 
 Observation: Even though AmazonS3ReadOnlyAccess was attached, access to S3 Table Buckets involves a separate API namespace (s3tables), demonstrating that AWS evaluates permissions at the individual API-action level.
-
-Security Analysis
-Principle of Least Privilege
+---
+#Security Analysis
+##Principle of Least Privilege
 Instead of granting broad permissions like AdministratorAccess, the user was given only the permissions required for the learning objective:
 
 Give an identity only the permissions required to perform its intended tasks.
 
-Reduced Blast Radius
+##Reduced Blast Radius
 If an identity with excessive permissions is compromised, the potential impact is massive. Restricting permissions limits the available actions and reduces the overall blast radius:
 
-Plaintext
-Compromised Identity → Limited Permissions → Limited Available Actions → Reduced Blast Radius
-Key Takeaways
+```text
+Compromised Identity
+        ↓
+Limited Permissions
+        ↓
+Limited Available Actions
+        ↓
+Reduced Blast Radius
+```
+
+#Key Takeaways
 Authentication and authorization are separate concepts.
 
 IAM controls access to AWS resources using users, groups, policies, and roles.
@@ -166,8 +177,8 @@ AWS evaluates permissions against specific API actions.
 AccessDenied indicates that the requested operation was not authorized under the applicable policies.
 
 Root users should never be used for everyday operations, and MFA is mandatory for security best practices.
-
-What I Learned
+---
+#What I Learned
 
 The most important practical lesson from this lab was that
 having access to an AWS account does not mean having access
@@ -179,6 +190,9 @@ or denying an operation.
 
 The hands-on tests made the difference between authentication
 and authorization clear:
+
+```text
+
 Authentication
       ↓
 Identity verified
@@ -193,12 +207,15 @@ ALLOW            DENY
    ↓               ↓
 Action          AccessDenied
 
-Lab Outcome
+```
+---
+#Lab Outcome
 
 Successfully created and tested a basic AWS IAM environment
 using a least-privilege approach.
 
 The lab demonstrated:
+```text
 
 Authentication
       ↓
@@ -213,3 +230,6 @@ Permission evaluated
 ALLOW            DENY
    ↓               ↓
 Action          AccessDenied
+
+
+
