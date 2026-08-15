@@ -68,8 +68,8 @@ Build practical skills in:
 
 ## 🧪 Labs Completed
 
-- [x] IAM — Users, Groups and Least Privilege
-- [ ] S3 Security
+- [✅] IAM — Users, Groups and Least Privilege
+- [✅] S3 Security
 - [ ] EC2 Security
 - [ ] AWS CLI
 - [ ] VPC Security
